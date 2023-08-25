@@ -1,73 +1,35 @@
-objectDetector= "";
-
-img = "";
-objects = [];
-status = "";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function preload(){
-  img = loadImage('dog_cat.jpg');
-}
-
-
 function setup() {
-  canvas = createCanvas(640, 420);
+  canvas = createCanvas(300, 300);
   canvas.center();
-  objectDetector = ml5.objectDetector('cocossd', modelLoaded);
-  document.getElementById("status").innerHTML = "Status : Detecting Objects";
+  video = createCapture(VIDEO);
+  video.hide();
+  classifier = ml5.imageClassifier('MobileNet',modelLoaded);
 }
 
 function modelLoaded() {
-  console.log("Model Loaded!")
-  status = true;
-  objectDetector.detect(img, gotResult);
+    console.log('Model Loaded!');
 }
+
+function draw() {
+  image(video, 0, 0, 300, 300);
+  classifier.classify(video, gotResult);
+}
+var previousResult = '';
 
 function gotResult(error, results) {
   if (error) {
-    console.log(error);
+    console.error(error);
+  } else {
+    if((results[0].confidence > 0.5) && (previousResult != results[0].label)){
+      console.log(results);
+      previousResult = results[0].label;
+      var synth = window.speechSynthesis;
+      speakData = 'O objeto detectado é - '+results[0].label;
+      var utterThis = new SpeechSynthesisUtterance(speakData);
+      synth.speak(utterThis);
+
+      document.getElementById("resultObjectName").innerHTML = results[0].label;
+      document.getElementById("resultObjectAccuracy").innerHTML = results[0].confidence.toFixed(3);
+    }
   }
-  console.log(results);
-  objects = results;
-}
-
-
-function draw() {
-  image(img, 0, 0, 640, 420);
-
-      if(status != "")
-      {
-        for (var i = 0; i < objects.length; i++) {
-          document.getElementById("status").innerHTML = "Status : Object Detected";
-    
-          fill(255, 0, 0);
-          percent = floor(objects[i].confidence * 100);
-          text(objects[i].label + " " + percent + "%", objects[i].x + 15, objects[i].y + 15);
-          noFill();
-          stroke(255, 0, 0);
-          rect(objects[i].x, objects[i].y, objects[i].width, objects[i].height);
-        }
-      }
 }
