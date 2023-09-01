@@ -1,6 +1,2 @@
-<NavigationContainer>
-      <Stack.Navigator initialRouteName="ScreenA">
-        <Stack.Screen name="ScreenA" component={ScreenA} />
-        <Stack.Screen name="ScreenB" component={ScreenB} />
-      </Stack.Navigator>
-    </NavigationContainer>
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
