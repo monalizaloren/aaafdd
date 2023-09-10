@@ -1,108 +1,116 @@
-import cv2
-import time
-import math
+<html>
+<head>
 
-p1 = 530
-p2 = 300
+	<title>Detecção de Objetos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
-xs = []
-ys = []
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.js"></script>
 
-video = cv2.VideoCapture("bb3.mp4")
+  <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
+  
+<style>
+  body
+{
+background-position: center;
+background-size: cover;
+}
 
-# Carregue o rastreador
-tracker = cv2.TrackerCSRT_create()
+.heading
+{
+font-size: 23px;
+width: 100%;
+margin: 0px;
+}
 
-# Leia o primeiro quadro do vídeo
-returned, img = video.read()
+#status
+{
+font-size: 18px;
+}
 
-# Selecione a caixa delimitadora na imagem
-bbox = cv2.selectROI("Rastreando", img, False)
+canvas
+{
+box-shadow: 10px 10px 10px grey;
+border-radius: 10px;
+}
+a
+{
+  float:right;
+  font-size: 20px !important;
+  margin: 5px;
+  background: black;
+  cursor: pointer;
+  color: white;
+}
+a:hover
+{
+  color:red !important;
+}
+</style>
+</head>
 
-# Inicialize o rastreador em img e na caixa delimitadora
-tracker.init(img, bbox)
+<body background="bg6.jpg">
+<center>
+  <h1 class="btn btn-info heading">Detecção de Objetos Demo</h1>
+  <a href="index.html" class="btn">Voltar</a>
+  <br><br>
+  <h3 id="status" class="btn btn-danger"></h3>
+</center>
 
-print(bbox)
+<script>
+  objectDetector= "";
 
-def drawBox(img, bbox):
-    x, y, w, h = int(bbox[0]), int(bbox[1]), int(bbox[2]), int(bbox[3])
+img = "";
+objects = [];
+status = "";
 
-    cv2.rectangle(img,(x,y),((x+w),(y+h)),(255,0,255),3,1)
-
-    cv2.putText(img,"Rastreando",(75,90),cv2.FONT_HERSHEY_SIMPLEX,0.7,(0,255,0),2)
-
-
-def goal_track(img, bbox):
-    
-    x,y,w,h = int(bbox[0]),int(bbox[1]),int(bbox[2]),int(bbox[3])
-
-    # Obtenha os PONTOS CENTRAIS da caixa delimitadora
-    c1 = x + int(w/2)
-    c2 = y + int(h/2)
-
-    # Desenhe um pequeno círculo usando os PONTOS CENTRAIS
-    cv2.circle(img,(c1,c2),2,(0,0,255),5)
-
-    cv2.circle(img,(int(p1),int(p2)),2,(0,255,0),3)
-
-
-
-    # Calcule a distância
-    dist = math.sqrt(((c1-p1)**2) + (c2-p2)**2)
-    print(dist)
-
-
-
-
-
-
-    # A bola é encestada se a distância for inferior a 20 pontos de pixels
-    if(dist<=20):
-        cv2.putText(img,"Cesta",(300,90),cv2.FONT_HERSHEY_SIMPLEX,0.7,(0,255,0),2)
-
-    xs.append(c1)
-    ys.append(c2)
-
-
-
-
-
-
-    for i in range(len(xs)-1):
-        cv2.circle(img,(xs[i],ys[i]),2,(0,0,255),5)
-
+function preload(){
+  img = loadImage('person.jpg');
+}
 
 
+function setup() {
+  canvas = createCanvas(640, 420);
+  canvas.center();
+  objectDetector = ml5.objectDetector('cocossd', modelLoaded);
+  document.getElementById("status").innerHTML = "Status: Detectando Objetos";
+}
+
+function modelLoaded() {
+  console.log("Modelo Carregado!")
+  status = true;
+  objectDetector.detect(img, gotResult);
+}
+
+function gotResult(error, results) {
+  if (error) {
+    console.log(error);
+  }
+  console.log(results);
+  objects = results;
+}
 
 
+function draw() {
+  if (status != undefined) {
+  	  image(img, 0, 0, 640, 420);
+    for (var i = 0; i < objects.length; i++) {
+      document.getElementById("status").innerHTML = "Status: Objetos Detectados";
 
+      fill(255, 0, 0);
+      percent = floor(objects[i].confidence * 100);
+      text(objects[i].label + " " + percent + "%", objects[i].x + 5, objects[i].y + 15);
+      noFill();
+      stroke(255, 0, 0);
+      rect(objects[i].x, objects[i].y, objects[i].width, objects[i].height);
+    }
+  }
+}
 
+</script>
 
-while True:
-    
-    check, img = video.read()   
+</body>
 
-    # Atualize o rastreador em img e na caixa delimitadora
-    success, bbox = tracker.update(img)
-
-    # Chame drawBox()
-    if success:
-        drawBox(img, bbox)
-    else:
-        cv2.putText(img,"Errou",(75,90),cv2.FONT_HERSHEY_SIMPLEX,0.7,(0,0,255),2)
-
-    # Chame goal_track()
-    goal_track(img, bbox)
-
-    # Exiba o vídeo
-    cv2.imshow("resultado", img)
-
-
-    # Saia da janela de exibição quando a barra de espaço for pressionada
-    key = cv2.waitKey(25)
-    if key == 32:
-        print("Interrompido")
-        break
-
-video.release()
-cv2.destroyALLwindows()
+</html>
