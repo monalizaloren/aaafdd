@@ -1,54 +1,94 @@
-<html>
+import React from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Linking } from 'react-native';
+import { Feather } from '@expo/vector-icons'; // Importe o ícone de seta
 
-<head>
-  <title>App de Identificação de Imagem em Tempo Real</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+const HarryPotter = ({ navigation }) => {
+  // Função para lidar com o botão de voltar
+  const handleGoBack = () => {
+//UTILIZE O CÓDIGO 'navigation.goBack();' PARA VOLTAR A TELA INICIAL
+    ???
+  };
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.js"></script>
-  <script src="https://unpkg.com/ml5@0.4.3/dist/ml5.min.js"></script>
+  // Função para abrir o link externo
+  const openHBOmaxLink = () => {
+//COLOQUE O LINK AQUI
+    Linking.openURL('???');
+  };
 
-  <link rel="stylesheet" type="text/css" href="style.css">
+  return (
+    <View style={styles.container}>
+      <Image
+        source={require('../assets/h.jpg')}
+        style={styles.image}
+      />
+      <View style={styles.header}>
+        //PROGRAME QUE QUANDO O BOTÃO FOR PRESSIONADO, A FUNÇÃO 'HANDLEGOBACK' IRÁ SER CHAMADA
+        ???
+          <Feather name="arrow-left" size={24} color="#FFD700" /> {/* Ícone de seta com cor dourada */}
+        </TouchableOpacity>
+        <Text style={styles.title}>Harry Potter</Text>
+      </View>
+      <Text style={styles.description}>Descrição</Text>
+      <Text style={styles.sinopse}>
+        A história mágica de Harry Potter, um jovem bruxo que descobre seu
+        destino em Hogwarts e enfrenta desafios incríveis ao lado de seus
+        amigos.
+      </Text>
+        ////PROGRAME QUE QUANDO O BOTÃO FOR PRESSIONADO, A FUNÇÃO 'OPENHBOMAXLINK' IRÁ SER CHAMADA
+      ???
+        <Text style={styles.linkButtonText}>Assista no HBO Max</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
-</head>
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: '#331e11', // Marrom inspirado na paleta de cores do Harry Potter
+    paddingVertical: 16,
+  },
+  image: {
+    width: '100%',
+    height: 300,
+  },
+  header: {
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    width: '100%',
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 24,
+    color: '#FFD700', // Amarelo dourado inspirado no tema Harry Potter
+    marginLeft: 10,
+  },
+  description: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 20,
+    color: 'white',
+  },
+  sinopse: {
+    fontSize: 16,
+    marginHorizontal: 20,
+    textAlign: 'center',
+    color: 'white',
+  },
+  linkButton: {
+    backgroundColor: '#FFD700', // Amarelo dourado para o botão
+    padding: 16,
+    borderRadius: 8,
+    marginTop: 20,
+  },
+  linkButtonText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#331e11', // Marrom para o texto do botão
+    textAlign: 'center',
+  },
+});
 
-<body background="background.jpg">
-<center>
-  <h3 class="btn-primary heading">App de Identificação de Imagem em Tempo Real
-    <hr>
-    <center>
-      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 headingDiv">
-        Estamos usando o Mobilenet como modelo.  
-        <br>
-          <div class="btn headingDiv2">
-            O modelo Mobilenet é treinado em <br> mais de 1,3 milhão de imagens 
-          </div>
-        </div>
-    </center>
-    <br>
-  </h3>
-  <br><br>
-  
-  <p class="btn btn-success result_para_tag">Objeto: 
-    <span id="resultObjectName"></span> 
-  </p>
-  
-  <br><br>
-  <p class="btn btn-success result_para_tag">Precisão: 
-    <span id="resultObjectAccuracy"></span> 
-  </p>
-
-</center>
-
-<div class="copyRightFooter">
-  Desenvolvido por: BYJU'S Team
-</div>
-
-<script src="main.js"></script>
-</body>
-
-</html>
-
-
+export default HarryPotter;
