@@ -1,116 +1,89 @@
-<html>
-<head>
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
+import firebase from 'firebase';
 
-	<title>Detecção de Objetos</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+const LoginScreen = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.js"></script>
+  const handleLogin = () => {
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // Autenticação bem-sucedida
+        const user = userCredential.user;
+        // Navegue para a próxima tela após o login
+        navigation.navigate('Home');
+      })
+      .catch((error) => {
+        // Trate os erros de autenticação aqui
+        const errorMessage = error.message;
+        console.error(errorMessage);
+      });
+  };
 
-  <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
-  
-<style>
-  body
-{
-background-position: center;
-background-size: cover;
-}
+  return (
+//utiize o código 'ImageBackground' para colocar uma imagem de fundo, caso queira
+    <?
+      source={require('../assets/pi.jpg')}
+      style={styles.backgroundImage}
+    >
+      <View style={styles.container}>
+        <Text style={styles.title}>Bem-vindo!</Text>
+//utilize a tag 'textInput' para criar uma entrada de texto  de email e senha
+       ?
+//crie um botao que quando ele for clicado acontece a função 'handleLogin'
+      ?
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
+  );
+};
 
-.heading
-{
-font-size: 23px;
-width: 100%;
-margin: 0px;
-}
+const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+   width: '100%', // Defina a largura como 100%
+    height: '100%', 
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  container: {
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    width: '80%',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 24,
+    color: 'white',
+    marginBottom: 20,
+  },
+  input: {
+    width: '100%',
+    height: 40,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    marginVertical: 10,
+    padding: 10,
+    backgroundColor: 'white',
+  },
+  button: {
+    backgroundColor: 'red',
+    width: '100%',
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+});
 
-#status
-{
-font-size: 18px;
-}
-
-canvas
-{
-box-shadow: 10px 10px 10px grey;
-border-radius: 10px;
-}
-a
-{
-  float:right;
-  font-size: 20px !important;
-  margin: 5px;
-  background: black;
-  cursor: pointer;
-  color: white;
-}
-a:hover
-{
-  color:red !important;
-}
-</style>
-</head>
-
-<body background="bg6.jpg">
-<center>
-  <h1 class="btn btn-info heading">Detecção de Objetos Demo</h1>
-  <a href="index.html" class="btn">Voltar</a>
-  <br><br>
-  <h3 id="status" class="btn btn-danger"></h3>
-</center>
-
-<script>
-  objectDetector= "";
-
-img = "";
-objects = [];
-status = "";
-
-function preload(){
-  img = loadImage('person.jpg');
-}
-
-
-function setup() {
-  canvas = createCanvas(640, 420);
-  canvas.center();
-  objectDetector = ml5.objectDetector('cocossd', modelLoaded);
-  document.getElementById("status").innerHTML = "Status: Detectando Objetos";
-}
-
-function modelLoaded() {
-  console.log("Modelo Carregado!")
-  status = true;
-  objectDetector.detect(img, gotResult);
-}
-
-function gotResult(error, results) {
-  if (error) {
-    console.log(error);
-  }
-  console.log(results);
-  objects = results;
-}
-
-
-function draw() {
-  if (status != undefined) {
-  	  image(img, 0, 0, 640, 420);
-    for (var i = 0; i < objects.length; i++) {
-      document.getElementById("status").innerHTML = "Status: Objetos Detectados";
-
-      fill(255, 0, 0);
-      percent = floor(objects[i].confidence * 100);
-      text(objects[i].label + " " + percent + "%", objects[i].x + 5, objects[i].y + 15);
-      noFill();
-      stroke(255, 0, 0);
-      rect(objects[i].x, objects[i].y, objects[i].width, objects[i].height);
-    }
-  }
-}
-
-</script>
-
-</body>
-
-</html>
+export default LoginScreen;
