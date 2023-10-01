@@ -1,94 +1,19 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, Linking } from 'react-native';
-import { Feather } from '@expo/vector-icons'; // Importe o ícone de seta
+/
+            let meteor_arr = Object.keys(this.state.meteors).map(meteor_date => {
+                return this.state.meteors[meteor_date]
+            })
+            /* Aqui, você está usando o método concat para combinar os arrays individuais em meteor_arr em um único array chamado meteors. Isso é feito para que você possa realizar operações subsequentes em todos os dados dos meteoros em um único array.*/
+            let meteors = [].concat.apply([], meteor_arr);
+            meteors.forEach(function (element) {
+                let diameter = (element.estimated_diameter.kilometers.estimated_diameter_min + element.estimated_diameter.kilometers.estimated_diameter_max) / 2
+                let threatScore = (diameter / element.close_approach_data[0].miss_distance.kilometers) * 1000000000
+                element.threat_score = threatScore;
+            });
+            /* Acima, você está iterando sobre cada elemento no array meteors usando o método forEach. Para cada elemento (que representa os dados de um meteoro), você está calculando a média do diâmetro estimado do meteoro e, em seguida, calculando uma pontuação de ameaça com base no diâmetro médio e na distância mais próxima da Terra do meteoro. Essa pontuação de ameaça é atribuída à propriedade threat_score do elemento.*/
+            meteors.sort(function (a, b) {
+                return b.threat_score - a.threat_score
+            })
 
-const HarryPotter = ({ navigation }) => {
-  // Função para lidar com o botão de voltar
-  const handleGoBack = () => {
-//UTILIZE O CÓDIGO 'navigation.goBack();' PARA VOLTAR A TELA INICIAL
-    ???
-  };
-
-  // Função para abrir o link externo
-  const openHBOmaxLink = () => {
-//COLOQUE O LINK AQUI
-    Linking.openURL('???');
-  };
-
-  return (
-    <View style={styles.container}>
-      <Image
-        source={require('../assets/h.jpg')}
-        style={styles.image}
-      />
-      <View style={styles.header}>
-        //PROGRAME QUE QUANDO O BOTÃO FOR PRESSIONADO, A FUNÇÃO 'HANDLEGOBACK' IRÁ SER CHAMADA
-        ???
-          <Feather name="arrow-left" size={24} color="#FFD700" /> {/* Ícone de seta com cor dourada */}
-        </TouchableOpacity>
-        <Text style={styles.title}>Harry Potter</Text>
-      </View>
-      <Text style={styles.description}>Descrição</Text>
-      <Text style={styles.sinopse}>
-        A história mágica de Harry Potter, um jovem bruxo que descobre seu
-        destino em Hogwarts e enfrenta desafios incríveis ao lado de seus
-        amigos.
-      </Text>
-        ////PROGRAME QUE QUANDO O BOTÃO FOR PRESSIONADO, A FUNÇÃO 'OPENHBOMAXLINK' IRÁ SER CHAMADA
-      ???
-        <Text style={styles.linkButtonText}>Assista no HBO Max</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#331e11', // Marrom inspirado na paleta de cores do Harry Potter
-    paddingVertical: 16,
-  },
-  image: {
-    width: '100%',
-    height: 300,
-  },
-  header: {
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    width: '100%',
-    padding: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 24,
-    color: '#FFD700', // Amarelo dourado inspirado no tema Harry Potter
-    marginLeft: 10,
-  },
-  description: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginTop: 20,
-    color: 'white',
-  },
-  sinopse: {
-    fontSize: 16,
-    marginHorizontal: 20,
-    textAlign: 'center',
-    color: 'white',
-  },
-  linkButton: {
-    backgroundColor: '#FFD700', // Amarelo dourado para o botão
-    padding: 16,
-    borderRadius: 8,
-    marginTop: 20,
-  },
-  linkButtonText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#331e11', // Marrom para o texto do botão
-    textAlign: 'center',
-  },
-});
-
-export default HarryPotter;
+            /*o método sort para classificar os elementos no array meteors com base em suas pontuações de ameaça. Os elementos com pontuações de ameaça mais altas serão classificados primeiro. */
+            meteors = meteors.slice(0, 5)
+            /*  você está usando o método slice para pegar apenas os primeiros 5 elementos do array meteors, que são os 5 meteoros mais ameaçadores com base nas pontuações de ameaça calculadas anteriormente*/
