@@ -1,13 +1,12 @@
-#Defina os parâmetros das pad_sequences
+from flask import Flask, render_template
+app = Flask(__name__)
+#Na função, retorne render_template(‘index.html’)
+@app.route("/index")
+def first_webpage():
+    #Crie uma variável
+    name = 'Flask'
+    #Passe a variável no modelo
+    return render_template('index.html', index_variable = name)
+app.run(debug=True)
 
-from tensorflow.keras.preprocessing.sequence import pad_sequences
 
-padding_type='post'
-max_length = 100
-trunc_type='post'
-
-
-training_padded = pad_sequences(training_sequences, maxlen=max_length, 
-                                padding=padding_type, truncating=trunc_type)
-
-training_padded
