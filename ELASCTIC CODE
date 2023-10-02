@@ -1,0 +1,18 @@
+ function toggleClasses() {
+            const titleElement = document.querySelector('.guilherme-title');
+
+            if (window.innerWidth <= 768) {
+                // Adicionar a classe .gt e remover a classe .guilherme-title
+                titleElement.classList.add('gt');
+                titleElement.classList.remove('guilherme-title');
+            } else {
+                // Adicionar a classe .guilherme-title e remover a classe .gt
+                titleElement.classList.add('guilherme-title');
+                titleElement.classList.remove('gt');
+            }
+        }
+
+
+// Chamar a função quando a página carregar e redimensionar a tela
+        window.addEventListener('load', toggleClasses);
+        window.addEventListener('resize', toggleClasses);
